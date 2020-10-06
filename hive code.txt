@@ -1,0 +1,154 @@
+
+
+
+create table taxi(
+VendorID int,
+passenger_count TINYINT, trip_distance FLOAT,
+payment_type TINYINT,fare_amount FLOAT, extra FLOAT,
+tip_amount FLOAT,total_amount FLOAT
+) row format delimited
+fields terminated by ',';
+
+load data inpath '/nyc_data' into table taxi;
+
+--------------------------------------------------------------------------------------
+#Top 10 trips with maximum distance travelled
+select trip_distance from taxi sort by trip_distance desc limit 10;
+
+#Output
+99.91
+89.1
+74.83
+72.64
+65.02
+58.1
+57.5
+57.4
+57.24
+57.14
+
+-----------------------------------------------------------------------------------------
+#Top 10 highest total amount charged
+select total_amount from taxi sort by total_amount desc limit 10;
+
+#Output
+963.14
+892.8
+535.3
+500.0
+480.36
+480.36
+456.56
+400.3
+371.86
+341.76
+
+-----------------------------------------------------------------------------------------------
+#Number of records of each provider
+select vendorid,count(*) from taxi
+group by vendorid;
+
+#Output
+1	229134
+2	270866
+
+-----------------------------------------------------------------------------------------
+#Total no of Observations
+select count(*) from taxi;
+
+#Output
+500000
+
+---------------------------------------------------------------------------------------------
+#Number of passengers per trip
+select passenger_count,round((count(*)*100/500000),2)
+from taxi group by passenger_count;
+
+#Output
+1	72.91
+2	13.63
+3	3.71
+4	1.72
+5	4.54
+6	2.86
+
+#Solo rides are most common , with 72.91 % occupancy
+#Dual rides with 13.63 % occupancy
+
+---------------------------------------------------------------------------------------
+#Preferred mode of payment
+select payment_type,round((count(*)*100/500000),2)
+from taxi group by payment_type;
+
+#Output
+1	68.35
+2	30.95
+3	0.56
+4	0.14
+
+#Credit card pays are dominant with 68.35% and cash payment are 2nd highest paymnet 30.95%
+--------------------------------------------------------------------------------------
+
+#Percentage of passengers that have paid tip
+select tip_amount,round((count(*)*100/500000),2)  from (
+select case when tip_amount>0 then 1 else 0 end tip_amount
+from taxi ) T
+group by tip_amount;
+
+#Output
+0	93.92
+1	6.08
+
+# 6 % of passenegers have paid tip
+--------------------------------------------------------------------------------------
+# Percentage of total trips that have extra charge levied
+select extra,round((count(*)*100/500000),2)  from (
+select case when extra>0 then 1 else 0 end extra
+from taxi ) T
+group by extra;
+
+#Output
+0	34.63
+1	65.37
+
+# 65.37 % of trips have extra charge levied
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create table taxi(
+VendorID int,
+passenger_count int,
+trip_distance float,
+payment_type int,
+fare_amount float,
+extra float,
+tip_amount float,
+total_amount float
+) row format delimited
+fields terminated by ','
+
